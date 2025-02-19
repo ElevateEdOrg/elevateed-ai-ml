@@ -1,2 +1,4 @@
 .env
 /elevateded
+/qdrant_storage
+/uploads

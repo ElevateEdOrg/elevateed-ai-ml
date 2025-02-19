@@ -1,0 +1,59 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "File Processing API",
+    "description": "API for uploading and searching files",
+    "version": "1.0.0"
+  },
+  "host": "127.0.0.1:5000",
+  "schemes": ["http"],
+  "paths": {
+    "/upload": {
+      "post": {
+        "summary": "Upload a file",
+        "description": "Uploads a file (PDF, PPT, audio, or video) and processes it.",
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "file",
+            "type": "file",
+            "required": true,
+            "description": "The file to upload"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "File uploaded successfully"
+          },
+          "400": {
+            "description": "Invalid file upload"
+          }
+        }
+      }
+    },
+    "/search": {
+      "get": {
+        "summary": "Search for stored files",
+        "description": "Search files stored in QdrantDB.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "type": "string",
+            "required": true,
+            "description": "Search query text"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results returned"
+          },
+          "400": {
+            "description": "Invalid search query"
+          }
+        }
+      }
+    }
+  }
+}
