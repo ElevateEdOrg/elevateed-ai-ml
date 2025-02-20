@@ -4,3 +4,5 @@
 /uploads
 /__pycache__
 /backend
+/research/__pycache__
+/generated_quizzes

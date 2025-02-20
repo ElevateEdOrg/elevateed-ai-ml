@@ -106,7 +106,7 @@ class QdrantQuizViewer:
             # Generate quiz using Gemini
             prompt = self.build_mcq_prompt(combined_content)
             response = genai.generate_text(
-                model="tunedModels/gemini-1.0-pro",
+                model="models/gemini-1.0-pro",
                 prompt=prompt
             )
 

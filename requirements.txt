@@ -5,9 +5,9 @@ qdrant-client==1.8.1
 numpy==1.26.4
 uuid==1.30  # UUID handling
 langchain==0.1.12
-google-generativeai==0.3.2
+groq==0.0.1  # Replacing Gemini AI with Groq
 PyPDF2==3.0.1  # Alternative PDF processing library
-langchain-google-genai==0.0.9
+langchain-google-genai==0.0.9  # Might need removal if not needed with Groq
 pymupdf==1.23.6  # `fitz` comes with PyMuPDF
 python-pptx==0.6.21
 SpeechRecognition==3.10.0
