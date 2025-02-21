@@ -57,7 +57,7 @@ The **AI-Powered EdTech Platform** is a microservices-based learning system desi
    ```
 
 4. **Access API Documentation**
-   - Open `http://127.0.0.1:5000/docs` in your browser.
+   - Open `http://127.0.0.1:5000/swagger/#/` in your browser.
 
 ## Success Criteria
 - AI-powered quiz generation is functional and accurate.
