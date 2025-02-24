@@ -16,3 +16,4 @@ sentence-transformers==2.2.2
 torch==2.2.0  # Required by sentence-transformers
 transformers==4.38.2  # Optional but useful for AI models
 pytest
+pyngrok
