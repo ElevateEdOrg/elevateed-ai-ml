@@ -1,7 +1,11 @@
+# 
+
+
 from flask import Flask, request, jsonify, send_from_directory, redirect
 from flask_swagger_ui import get_swaggerui_blueprint
 from werkzeug.utils import secure_filename
 import os
+import json
 from config import Config
 from vector_db import QdrantClient
 from quiz_generator import generate_mcqs
@@ -28,34 +32,50 @@ app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
 def home():
     return redirect(SWAGGER_URL)
 
-# Initialize Qdrant Client
+# Initialize Qdrant Client (file storage remains available)
 qdrant_client = QdrantClient()
 
-# File upload route
-@app.route("/upload", methods=["POST"])
-def upload_file():
-    if "file" not in request.files:
-        return jsonify({"error": "No file part"}), 400
-    file = request.files["file"]
-    if file.filename == "":
-        return jsonify({"error": "No selected file"}), 400
-    filename = secure_filename(file.filename)
-    file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-    file.save(file_path)
-    if qdrant_client.store_file(file_path):
-        return jsonify({"message": "File stored successfully"}), 200
-    return jsonify({"error": "Failed to store file"}), 500
-
-# Quiz generation route
+# Unified endpoint: Accept file upload or JSON payload to generate quiz.
 @app.route("/generate_quiz", methods=["POST"])
 def generate_quiz():
-    data = request.get_json()
-    if not data or "text" not in data:
-        return jsonify({"quiz": "I cannot generate MCQs without the text content. Please provide the text content."}), 400
-    text = data["text"]
+    data = None
+
+    # Check if a file was uploaded.
+    if "file" in request.files:
+        file = request.files["file"]
+        if file.filename == "":
+            return jsonify({"error": "No selected file"}), 400
+        try:
+            # Read the file's content and decode as UTF-8.
+            file_content = file.read()
+            file_text = file_content.decode("utf-8")
+            data = json.loads(file_text)
+        except Exception as e:
+            return jsonify({"error": f"Failed to process file: {str(e)}"}), 400
+    else:
+        # If no file, try to get JSON payload directly.
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "No JSON content provided."}), 400
+
+    # Ensure the JSON data includes the "content" key.
+    if "content" not in data:
+        return jsonify({"error": "JSON must contain 'content' key."}), 400
+
+    content = data["content"]
     num_questions = data.get("num_questions", 5)
-    quiz = generate_mcqs(text, num_questions)
-    return jsonify({"quiz": quiz})
+    
+    # Optionally, you could store the file content using QdrantClient if needed.
+    # (Uncomment if file upload storage is still desired.)
+    # if "file" in request.files:
+    #     filename = secure_filename(file.filename)
+    #     file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+    #     with open(file_path, "wb") as f:
+    #         f.write(file_content)
+    #     qdrant_client.store_file(file_path)
+
+    quiz = generate_mcqs(content, num_questions)
+    return jsonify(quiz)
 
 if __name__ == "__main__":
     app.run(debug=True)
