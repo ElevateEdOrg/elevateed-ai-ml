@@ -1,22 +1,15 @@
-flask==3.0.0
-flasgger==0.9.7.1  # For Swagger UI
-flask-swagger-ui==4.11.1  # Optional for better Swagger UI
-qdrant-client>=1.9.0   # For Qdrant client
-numpy==1.26.4
-uuid==1.30  # UUID handling
-langchain>=0.2.5
-langchain-core==0.3.39 # Ensures compatibility with langchain-community
-langchain-community==0.3.18 # Fixing DoS vulnerability
-# langchain-core>=0.2.0,<0.4.0  
-# langchain-community>=0.2.5  
-groq==0.0.1  # Replacing Gemini AI with Groq
-pypdf >= 3.9.0  # Alternative PDF processing library
-pymupdf==1.23.6  # `fitz` comes with PyMuPDF
-python-pptx==0.6.21
-SpeechRecognition==3.10.0
-moviepy==1.0.3
-sentence-transformers==2.2.2
-torch==2.2.0  # Required by sentence-transformers
-transformers>=4.48.0  # Optional but useful for AI models
-pytest
-pyngrok
+Flask==3.1.0
+flask_swagger_ui==4.11.1
+groq==0.18.0
+numpy==2.2.3
+pandas==2.2.3
+protobuf==5.29.3
+psycopg2==2.9.10
+python-dotenv==1.0.1
+pywin32==308
+qdrant_client==1.13.2
+rich==13.9.4
+scikit_learn==1.6.1
+sentence_transformers==3.4.1
+tabulate==0.9.0
+Werkzeug==3.1.3

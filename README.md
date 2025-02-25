@@ -6,7 +6,7 @@ The **AI-Powered EdTech Platform** is a microservices-based learning system desi
 ## Key Features of AI/ML Services
 1. **AI-Driven Assessments**
    - Generate multiple-choice questions (MCQs) dynamically from course content (PDFs, PPTs, audio, video).
-   - Use **Gemini AI** to analyze content and create contextual quiz questions.
+   - Use **Groq AI** to analyze content and create contextual quiz questions.
    - Store and retrieve embedded content using **Qdrant Vector Database**.
 
 2. **Student Performance Evaluation**
@@ -25,7 +25,7 @@ The **AI-Powered EdTech Platform** is a microservices-based learning system desi
 ## Tech Stack
 - **Backend Framework**: Flask
 - **Vector Database**: Qdrant
-- **AI Model**: Gemini AI
+- **AI Model**: Groq AI
 - **API Documentation**: Swagger
 - **Storage**: Local file storage (for content processing)
 - **Containerization & Deployment**: Docker, AWS
