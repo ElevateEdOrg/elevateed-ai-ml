@@ -1,12 +1,12 @@
 flask==3.0.0
 flasgger==0.9.7.1  # For Swagger UI
 flask-swagger-ui==4.11.1  # Optional for better Swagger UI
-qdrant-client==1.8.1
+qdrant-client>=1.9.0   # For Qdrant client
 numpy==1.26.4
 uuid==1.30  # UUID handling
-langchain==0.1.12
+langchain>=0.2.5
 groq==0.0.1  # Replacing Gemini AI with Groq
-PyPDF2==3.0.1  # Alternative PDF processing library
+pypdf>=3.9.0  # Alternative PDF processing library
 langchain-google-genai==0.0.9  # Might need removal if not needed with Groq
 pymupdf==1.23.6  # `fitz` comes with PyMuPDF
 python-pptx==0.6.21
@@ -14,6 +14,6 @@ SpeechRecognition==3.10.0
 moviepy==1.0.3
 sentence-transformers==2.2.2
 torch==2.2.0  # Required by sentence-transformers
-transformers==4.38.2  # Optional but useful for AI models
+transformers>=4.48.0 # Optional but useful for AI models
 pytest
 pyngrok
