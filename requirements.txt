@@ -1,7 +1,7 @@
 flask==3.0.0
 flasgger==0.9.7.1  # For Swagger UI
 flask-swagger-ui==4.11.1  # Optional for better Swagger UI
-qdrant-client==1.8.1
+qdrant-client==1.9.0
 numpy==1.26.4
 uuid==1.30  # UUID handling
 langchain==0.1.12
