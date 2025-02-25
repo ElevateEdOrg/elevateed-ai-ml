@@ -1,6 +1,3 @@
-# 
-
-
 from flask import Flask, request, jsonify, send_from_directory, redirect
 from flask_swagger_ui import get_swaggerui_blueprint
 from werkzeug.utils import secure_filename
