@@ -40,7 +40,7 @@ The **AI-Powered EdTech Platform** is a microservices-based learning system desi
 ## Setup Instructions
 1. **Clone the Repository**
    ```bash
-   git clone <repo_url>
+   git clone https://github.com/ElevateEdOrg/elevateed-ai-ml.git
    cd ai-edtech-ml-services
    ```
 
