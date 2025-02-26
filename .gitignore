@@ -1,10 +1,6 @@
 .env
 /elevateded
-/qdrant_storage
-/uploads
-/__pycache__
-/backend
-/research/__pycache__
-/generated_quizzes
-/qdrant_quiz_viewer.log
-qdrant_quiz_viewer.log
+/videos
+/test/Gradient descent for multiple linear regression.webm
+__pycache__
+sql_ops.log

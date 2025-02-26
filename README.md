@@ -1,69 +1,98 @@
-# AI-Powered EdTech Platform - AI/ML Services
+# Quiz & Recommendation Cron Job Service
 
-## Project Overview
-The **AI-Powered EdTech Platform** is a microservices-based learning system designed to enhance student learning through AI-driven assessments and personalized learning recommendations. This repository focuses on the **AI/ML services** within the platform, responsible for generating AI-based quiz questions, evaluating student performance, and recommending personalized learning paths.
+## Overview
+This microservice is part of an AI-powered EdTech platform that automates the generation of quiz assessments and personalized learning recommendations from course videos. It operates as a scheduled cron job that:
+- Transcribes course videos using OpenAI Whisper
+- Generates quizzes from transcripts using Groq LLM
+- Updates personalized learning recommendations based on content analysis
 
-## Key Features of AI/ML Services
-1. **AI-Driven Assessments**
-   - Generate multiple-choice questions (MCQs) dynamically from course content (PDFs, PPTs, audio, video).
-   - Use **Groq AI** to analyze content and create contextual quiz questions.
-   - Store and retrieve embedded content using **Qdrant Vector Database**.
-
-2. **Student Performance Evaluation**
-   - Analyze quiz responses to determine student strengths and weaknesses.
-   - Generate detailed assessment reports.
-
-3. **Personalized Learning Paths**
-   - Recommend learning materials based on quiz performance.
-   - Suggest additional resources to improve weak areas.
-
-4. **Microservices Architecture**
-   - AI/ML services are built using **Flask**.
-   - Expose RESTful APIs documented with **Swagger**.
-   - Ensure seamless communication with other microservices via **API Gateway**.
+## Key Features
+- **Automated Video Transcription**: Converts course videos to text using Whisper
+- **AI-Driven Quiz Generation**: Creates multiple-choice questions from transcript content
+- **Recommendation Updates**: Processes quiz data to update personalized learning paths
+- **Scheduled Execution**: Runs periodically to process the latest course content
 
 ## Tech Stack
-- **Backend Framework**: Flask
-- **Vector Database**: Qdrant
-- **AI Model**: Groq AI
-- **API Documentation**: Swagger
-- **Storage**: Local file storage (for content processing)
-- **Containerization & Deployment**: Docker, AWS
+- **Language**: Python 3.x
+- **Core Libraries**:
+  - Whisper - Video transcription
+  - Groq API - LLM-based quiz generation
+  - psycopg2 - PostgreSQL database integration
+  - schedule - Cron-like job scheduling
+- **Database**: PostgreSQL
 
-## API Endpoints
-| Endpoint                  | Method | Description |
-|---------------------------|--------|-------------|
-| `/generate-mcq`           | POST   | Generate AI-based quiz questions from course content. |
-| `/evaluate-assessment`    | POST   | Analyze student quiz responses and provide feedback. |
-| `/get-learning-path`      | GET    | Retrieve personalized learning recommendations. |
+## Directory Structure
+```
+your_project/
+├── repo/
+│   ├── videos/            # Course video storage
+│   ├── transcription/     # Transcript and quiz JSON files
+│   ├── sql_ops.py         # Database operations
+│   ├── quiz.py            # Quiz generation using Groq LLM
+│   ├── cron_job.py        # Main service file
+│   ├── requirements.txt   # Dependencies
+│   ├── config.py          # Configuration settings
+│   └── README.md          # Project documentation
+```
 
-## Setup Instructions
-1. **Clone the Repository**
+## Setup & Installation
+
+1. **Clone the Repository**:
    ```bash
    git clone https://github.com/ElevateEdOrg/elevateed-ai-ml.git
-   cd ai-edtech-ml-services
+   cd your_project
    ```
 
-2. **Create a Virtual Environment & Install Dependencies**
+2. **Install Dependencies**:
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
    pip install -r requirements.txt
    ```
 
-3. **Run the Flask Server**
-   ```bash
-   flask run
-   ```
+3. **Configure Settings**:
+   Update `config.py` with required credentials:
+   - Database connection details
+   - Groq API key
+   - File paths and other settings
 
-4. **Access API Documentation**
-   - Open `http://127.0.0.1:5000/swagger/#/` in your browser.
+## How It Works
 
-## Success Criteria
-- AI-powered quiz generation is functional and accurate.
-- Student performance evaluations provide meaningful insights.
-- Personalized learning recommendations improve engagement.
-- APIs integrate seamlessly with other microservices.
+1. **Transcription Process**:
+   - Service scans the videos directory for new content
+   - Each video is transcribed and saved as a text file
+
+2. **Quiz Generation**:
+   - For each transcript, the service generates a quiz in JSON format
+   - Questions are tailored to the educational content
+
+3. **Database Operations**:
+   - Quiz data is inserted into PostgreSQL
+   - Recommendation algorithms process content relationships
+
+4. **Scheduling**:
+   - The entire workflow runs on a configurable schedule
+
+## Running the Service
+
+**Manual Execution**:
+```bash
+python cron_job.py
+```
+
+**System Scheduler**:
+Configure your system's task scheduler to execute the script at desired intervals:
+- Linux: Use crontab
+- Windows: Use Task Scheduler
+
+## Logging & Monitoring
+Operations are logged to `cron_job.log` for debugging and monitoring purposes.
+
+## Future Enhancements
+- Advanced recommendation algorithms
+- Multi-format content support
+- Performance optimization for large video libraries
+
+## Contact
+For questions or contributions, please contact the project team or create an issue in the repository.
 
 ## Contribution Guidelines
 - Follow best practices for Flask API development.

@@ -1,78 +1,68 @@
-from flask import Flask, request, jsonify, send_from_directory, redirect
-from flask_swagger_ui import get_swaggerui_blueprint
-from werkzeug.utils import secure_filename
+INPUT_DIRECTORY = r'D:\\Wappnet\\repo\\videos'
+OUTPUT_DIRECTORY = r'D:\\Wappnet\\repo\\transcription'
+
+import whisper
 import os
-import json
 from config import Config
-from vector_db import QdrantClient
-from quiz_generator import generate_mcqs
+from quiz import generate_quiz
+from sql_ops import SqlOps  # Import your SQL operations module
 
-app = Flask(__name__)
-app.config["UPLOAD_FOLDER"] = Config.UPLOAD_FOLDER
+def transcribe_videos(video_path: str) -> str:
+    """Transcribes a video file using Whisper and saves the transcript as a .txt file."""
+    model = whisper.load_model("base")
+    result = model.transcribe(video_path)
+    text = result.get("text", "")
 
-# Serve openapi.json from the docs/ folder
-@app.route("/openapi.json")
-def openapi_json():
-    docs_path = os.path.join(os.path.dirname(__file__), "docs")
-    return send_from_directory(docs_path, "openapi.json")
+    base_name = os.path.splitext(os.path.basename(video_path))[0]
+    transcript_path = os.path.join(OUTPUT_DIRECTORY, f"{base_name}.txt")
+    with open(transcript_path, "w", encoding="utf-8") as f:
+        f.write(text)
 
-# Swagger UI setup
-SWAGGER_URL = "/swagger"
-API_URL = "/openapi.json"
-swagger_ui_blueprint = get_swaggerui_blueprint(
-    SWAGGER_URL, API_URL, config={"app_name": "File Upload, Processing, and Quiz Generation API"}
-)
-app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
+    print(f"Transcription has been saved: {transcript_path}")
+    return transcript_path 
 
-# Root route: redirect to Swagger UI
-@app.route("/")
-def home():
-    return redirect(SWAGGER_URL)
-
-# Initialize Qdrant Client (file storage remains available)
-qdrant_client = QdrantClient()
-
-# Unified endpoint: Accept file upload or JSON payload to generate quiz.
-@app.route("/generate_quiz", methods=["POST"])
-def generate_quiz():
-    data = None
-
-    # Check if a file was uploaded.
-    if "file" in request.files:
-        file = request.files["file"]
-        if file.filename == "":
-            return jsonify({"error": "No selected file"}), 400
-        try:
-            # Read the file's content and decode as UTF-8.
-            file_content = file.read()
-            file_text = file_content.decode("utf-8")
-            data = json.loads(file_text)
-        except Exception as e:
-            return jsonify({"error": f"Failed to process file: {str(e)}"}), 400
-    else:
-        # If no file, try to get JSON payload directly.
-        data = request.get_json()
-        if not data:
-            return jsonify({"error": "No JSON content provided."}), 400
-
-    # Ensure the JSON data includes the "content" key.
-    if "content" not in data:
-        return jsonify({"error": "JSON must contain 'content' key."}), 400
-
-    content = data["content"]
-    num_questions = data.get("num_questions", 5)
+def process_transcript(api_key: str = Config.GROQ_API_KEY, folder: str = OUTPUT_DIRECTORY):
+    """Processes all transcript .txt files in the output directory to generate quiz JSON files."""
+    if not os.path.exists(folder):
+        os.makedirs(folder)
     
-    # Optionally, you could store the file content using QdrantClient if needed.
-    # (Uncomment if file upload storage is still desired.)
-    # if "file" in request.files:
-    #     filename = secure_filename(file.filename)
-    #     file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-    #     with open(file_path, "wb") as f:
-    #         f.write(file_content)
-    #     qdrant_client.store_file(file_path)
+    for file in os.listdir(folder):
+        if file.endswith(".txt"):
+            transcript_path = os.path.join(folder, file)
+            json_path = transcript_path.replace(".txt", ".json")
+            if os.path.exists(json_path):
+                continue
+            generate_quiz(transcript_path, api_key)
 
-    quiz = generate_mcqs(content, num_questions)
-    return jsonify(quiz)
+def insert_quizzes(course_id: str, folder: str = OUTPUT_DIRECTORY):
+    """
+    Inserts all generated quiz JSON files from the output directory into the PostgreSQL database.
+    
+    Args:
+        course_id (str): The ID of the course to associate with the quiz.
+        folder (str): The folder where quiz JSON files are stored.
+    """
+    sql = SqlOps()
+    for file in os.listdir(folder):
+        if file.endswith(".json"):
+            json_path = os.path.join(folder, file)
+            try:
+                sql.insert_quiz(course_id=course_id, file_path=json_path)
+                print(f"Inserted quiz from {json_path}")
+            except Exception as e:
+                print(f"Error inserting quiz from {json_path}: {e}")
+    sql.close()
 
-if __name__ == "__main__":
-    app.run(debug=True)
+def main():
+    # Transcribe a specific video file.
+    transcribe_videos(r"D:\\Wappnet\\repo\\videos\\Gradient descent for multiple linear regression.webm")
+    
+    # Process transcripts to generate quizzes.
+    process_transcript()
+    
+    # Insert the generated quiz JSON files into PostgreSQL.
+    course_id = "08c82434-5790-4162-8409-ef5c662b6d75"  # Replace with your actual course ID
+    insert_quizzes(course_id)
+
+if __name__ == '__main__':
+    main()
