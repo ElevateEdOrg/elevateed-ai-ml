@@ -1,4 +1,5 @@
 import logging
+from typing import List
 from config import Config
 import psycopg2
 import json
@@ -39,6 +40,29 @@ class SqlOps:
         except Exception as e:
             logging.error(f"Error fetching new courses: {e}")
             return []
+        
+    def fetch_courses_without_quiz(self) -> List[tuple]:
+        """
+        Retrieves all courses that do not have any quiz (assessment) generated.
+        
+        Returns:
+            List[tuple]: A list of courses (each represented as a tuple) that do not have a corresponding entry in the assessments table.
+        """
+        try:
+            query = """
+                SELECT c.*
+                FROM courses c
+                LEFT JOIN assessments a ON c.id = a.course_id
+                WHERE a.id IS NULL;
+            """
+            self.cursor.execute(query)
+            courses = self.cursor.fetchall()
+            logging.info("Fetched %d courses without quiz", len(courses))
+            return courses
+        except Exception as e:
+            logging.error("Error fetching courses without quiz: %s", e)
+            return []
+
         
     def insert_quiz(self, course_id: str, file_path: str):
         """

@@ -76,3 +76,90 @@ def search_transcript_in_qdrant(course_id: str, query: str):
         limit=3
     )
     return [hit.payload["text"] for hit in results]
+
+def check_transcript_embeddings_exist(qdrant_url: str, collection_name: str, lecture_id: str) -> bool:
+    """
+    Check if transcript embeddings for a given lecture_id exist in the specified Qdrant collection.
+    
+    Args:
+        qdrant_url (str): URL of the Qdrant server, e.g. "http://localhost:6333".
+        collection_name (str): Name of the Qdrant collection.
+        lecture_id (str): The lecture identifier to check for.
+    
+    Returns:
+        bool: True if embeddings for the given lecture_id exist, otherwise False.
+    """
+    from qdrant_client import QdrantClient
+    from qdrant_client.models import Filter, FieldCondition, MatchValue
+    
+    # Initialize the Qdrant client.
+    client = QdrantClient(qdrant_url)
+    
+    # Define a filter to check for the lecture_id in the payload.
+    query_filter = Filter(
+        must=[
+            FieldCondition(
+                key="lecture_id",
+                match=MatchValue(value=lecture_id)
+            )
+        ]
+    )
+    
+    try:
+        # Use the scroll method to fetch at most one matching point.
+        result = client.scroll(
+            collection_name=collection_name,
+            filter=query_filter,
+            limit=1
+        )
+        # If we find at least one point, embeddings exist.
+        if result and result.points and len(result.points) > 0:
+            return True
+    except Exception as e:
+        print(f"Error checking transcript embeddings: {e}")
+    
+    return False
+
+
+def check_transcript_embeddings_exist(qdrant_url: str, collection_name: str, lecture_id: str) -> bool:
+    """
+    Check if transcript embeddings for a given lecture_id exist in the specified Qdrant collection.
+    
+    Args:
+        qdrant_url (str): URL of the Qdrant server, e.g. "http://localhost:6333".
+        collection_name (str): Name of the Qdrant collection.
+        lecture_id (str): The lecture identifier to check for.
+    
+    Returns:
+        bool: True if embeddings for the given lecture_id exist, otherwise False.
+    """
+    from qdrant_client import QdrantClient
+    from qdrant_client.models import Filter, FieldCondition, MatchValue
+    
+    # Initialize the Qdrant client.
+    client = QdrantClient(qdrant_url)
+    
+    # Define a filter to check for the lecture_id in the payload.
+    query_filter = Filter(
+        must=[
+            FieldCondition(
+                key="lecture_id",
+                match=MatchValue(value=lecture_id)
+            )
+        ]
+    )
+    
+    try:
+        # Use the scroll method to fetch at most one matching point.
+        result = client.scroll(
+            collection_name=collection_name,
+            filter=query_filter,
+            limit=1
+        )
+        # If we find at least one point, embeddings exist.
+        if result and result.points and len(result.points) > 0:
+            return True
+    except Exception as e:
+        print(f"Error checking transcript embeddings: {e}")
+    
+    return False
