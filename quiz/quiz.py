@@ -167,7 +167,7 @@ Separate each question with a line containing exactly '---'
         prompt = self.build_prompt(relevant_content, num_questions)
         try:
             # Generate quiz using groq_client.chat() directly.
-            response = self.groq_client.chat(
+            response = self.groq_client.chat.completions.create(
                 model="mixtral-8x7b-32768",
                 messages=[{"role": "user", "content": prompt}]
             )

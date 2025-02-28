@@ -70,7 +70,7 @@ def generate_quiz_for_course(course_id):
             "message": f"No lectures found for course {course_id}"
         }), 400
 
-    local_dir = "/tmp/course_videos"
+    local_dir = "E:\\Wappnet internship\\ElevateEdOrg"
     for (lecture_id, video_path) in lecture_rows:
         # Download if it's a remote URL (e.g., S3, HTTP)
         local_video_path = video_path
@@ -82,7 +82,7 @@ def generate_quiz_for_course(course_id):
 
         # Transcribe
         transcript_filename = f"{uuid.uuid4()}.txt"
-        transcript_path = os.path.join("/tmp", transcript_filename)
+        transcript_path = os.path.join("E:\\Wappnet internship\\ElevateEdOrg", transcript_filename)
         success = transcribe_video(local_video_path, transcript_path)
         if not success:
             print(f"Transcription failed for lecture {lecture_id}")
@@ -103,13 +103,13 @@ def generate_quiz_for_course(course_id):
 
     # Now generate MCQs for the entire course
     mcq_gen = MCQGenerator(
-        api_key=Config.GROQ_API_KEY,
-        qdrant_url=Config.QDRANT_URL,
-        collection_name=f"course_{str_course_id}"
+        api_key = Config.GROQ_API_KEY,
+        qdrant_url = Config.QDRANT_URL,
+        qdrant_collection = f"course_{str_course_id}"
     )
 
     prompt_topic = "Generate a comprehensive quiz covering all lectures in this course."
-    generation_result = mcq_gen.generate_mcqs(prompt_topic, top_k=5)
+    generation_result = mcq_gen.generate_mcqs(prompt_topic,num_questions =5)
     if generation_result.get("status") == "error":
         sql_ops.close()
         return jsonify({"status": "error", "message": "MCQ generation failed"}), 500
@@ -118,7 +118,7 @@ def generate_quiz_for_course(course_id):
 
     # Store quiz JSON in PostgreSQL
     import json
-    temp_quiz_file = f"/tmp/{uuid.uuid4()}.json"
+    temp_quiz_file = f"E:\\Wappnet internship\\ElevateEdOrg{uuid.uuid4()}.json"
     with open(temp_quiz_file, "w", encoding="utf-8") as f:
         f.write(json.dumps(quiz_json, indent=2))
 
