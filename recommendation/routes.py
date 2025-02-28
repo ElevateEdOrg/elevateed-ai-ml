@@ -1,14 +1,49 @@
+# recommendation/routes.py
+
 from flask import Blueprint, jsonify
-from services import recommend_courses, update_learning_path
+from flasgger.utils import swag_from
+from recommendation.services import get_recommendations_for_user
 
-routes = Blueprint("routes", __name__)
+recommendation_blueprint = Blueprint('recommendation', __name__)
 
-@routes.route("/recommend/<int:user_id>", methods=["GET"])
+@recommendation_blueprint.route('/recommendations/<uuid:user_id>', methods=['GET'])
+@swag_from({
+    'responses': {
+        200: {
+            'description': 'Return recommended course IDs for the user',
+            'examples': {
+                'application/json': {
+                    'user_id': 'uuid-string',
+                    'recommendations': ['course-uuid-1', 'course-uuid-2']
+                }
+            }
+        }
+    },
+    'parameters': [
+        {
+            'name': 'user_id',
+            'in': 'path',
+            'type': 'string',
+            'format': 'uuid',
+            'required': True,
+            'description': 'UUID of the user'
+        }
+    ],
+    'tags': ['Recommendations']
+})
 def get_recommendations(user_id):
-    recommendations = recommend_courses(user_id)
-    return jsonify({"user_id": user_id, "recommended_courses": recommendations})
+    """
+    Get course recommendations for a specific user.
 
-@routes.route("/update-learning-path/<int:user_id>", methods=["POST"])
-def update_path(user_id):
-    update_learning_path(user_id)
-    return jsonify({"message": f"Learning path updated for user {user_id}"})
+    This endpoint returns a list of course UUIDs that are recommended
+    for the given user based on collaborative filtering.
+
+    ---
+    produces:
+      - "application/json"
+    """
+    recommendations = get_recommendations_for_user(user_id)
+    return jsonify({
+        'user_id': str(user_id),
+        'recommendations': recommendations
+    })
