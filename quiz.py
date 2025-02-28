@@ -142,6 +142,7 @@ Separate each question with a line containing exactly '---'
                 return {"status": "error", "message": "Failed to generate MCQs."}
             
             quiz_text = response.choices[0].message.content
+            print(quiz_text) # for debugging.
             quiz_structured = self.quiz_parser.parse(quiz_text)
             metadata = {
                 "generated_at": datetime.now().isoformat(),

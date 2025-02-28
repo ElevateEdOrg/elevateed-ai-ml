@@ -1,6 +1,7 @@
 INPUT_DIRECTORY = r'D:\\Wappnet\\repo\\videos'
 OUTPUT_DIRECTORY = r'D:\\Wappnet\\repo\\transcription'
 
+from datetime import datetime
 import os
 import json
 import whisper
@@ -35,29 +36,24 @@ def transcribe_video(video_path: str) -> str:
 
 def process_transcripts(api_key: str = Config.GROQ_API_KEY, folder: str = OUTPUT_DIRECTORY, course_id: str = "default_course"):
     """
-    Processes all transcript (.txt) files in the output directory.
-    For each transcript:
+    Processes all transcript (.txt) files in the output directory:
       - Checks if transcript embeddings exist in Qdrant; if not, stores them.
-      - Generates a quiz JSON file using the stored embeddings (if not already generated).
+      - Generates quiz questions from each transcript and aggregates all questions into a single JSON file.
     """
     if not os.path.exists(folder):
         os.makedirs(folder)
     
+    all_quiz_questions = []
+    qdrant_url = Config.QDRANT_URL  # e.g., "http://localhost:6333"
+    qdrant_collection = f"course_{course_id}"
+    
     for file in os.listdir(folder):
         if file.endswith(".txt"):
             transcript_path = os.path.join(folder, file)
-            json_path = transcript_path.replace(".txt", ".json")
-            if os.path.exists(json_path):
-                print(f"Quiz JSON already exists: {json_path}")
-                continue
-
-            # Derive lecture_id from the transcript file name.
+            # Derive lecture_id from transcript file name.
             lecture_id = os.path.splitext(file)[0]
             
             try:
-                # Check if embeddings for this lecture already exist in Qdrant.
-                qdrant_url = Config.QDRANT_URL  # e.g., "http://localhost:6333"
-                qdrant_collection = f"course_{course_id}"
                 if not check_transcript_embeddings_exist(qdrant_url, qdrant_collection, lecture_id):
                     store_transcript_in_qdrant(course_id, lecture_id, transcript_path)
                 else:
@@ -67,24 +63,37 @@ def process_transcripts(api_key: str = Config.GROQ_API_KEY, folder: str = OUTPUT
                 continue
 
             try:
-                # Read transcript content.
                 with open(transcript_path, "r", encoding="utf-8") as f:
                     transcript_text = f.read()
-                # Use the first 500 characters as the query to retrieve relevant segments.
+                # Use the first 500 characters as a query to retrieve relevant segments.
                 query_text = transcript_text[:500]
                 
                 # Initialize the MCQGenerator with Qdrant details.
                 mcq_gen = MCQGenerator(api_key, qdrant_url, qdrant_collection)
-                
-                # Generate quiz data based on the query.
                 quiz_data = mcq_gen.generate_mcqs(query_text)
                 
-                # Save the generated quiz JSON file.
-                with open(json_path, "w", encoding="utf-8") as f:
-                    json.dump(quiz_data, f, indent=4)
-                print(f"Quiz saved: {json_path}")
+                if quiz_data.get("status") == "success":
+                    all_quiz_questions.extend(quiz_data.get("quiz", []))
+                    print(f"Quiz questions generated for {lecture_id}.")
+                else:
+                    print(f"Quiz generation failed for {lecture_id}: {quiz_data.get('message')}")
             except Exception as e:
                 print(f"Error generating quiz for {lecture_id}: {e}")
+    
+    # Aggregate all quiz questions into a single JSON file.
+    aggregated_quiz_path = os.path.join(folder, f"course_{course_id}_quiz.json")
+    aggregated_data = {
+        "status": "success",
+        "quiz": all_quiz_questions,
+        "metadata": {
+            "generated_at": datetime.now().isoformat(),
+            "num_videos_processed": len(all_quiz_questions)
+        }
+    }
+    with open(aggregated_quiz_path, "w", encoding="utf-8") as f:
+        json.dump(aggregated_data, f, indent=4)
+    print(f"Aggregated quiz saved: {aggregated_quiz_path}")
+
 
 def insert_quizzes(course_id: str, folder: str = OUTPUT_DIRECTORY):
     """

@@ -18,3 +18,6 @@ class Config:
     GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
     QDRANT_URL = 'http://localhost:6333'
+
+    INPUT_DIRECTORY = os.getenv("INPUT_DIRECTORY")
+    OUTPUT_DIRECTORY = os.getenv("OUTPUT_DIRECTORY")
