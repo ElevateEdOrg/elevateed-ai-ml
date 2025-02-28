@@ -5,3 +5,4 @@
 /__pycache__/
 /recommendation/__pycache__
 sql_ops.log
+/quiz/__pycache__/
