@@ -2,5 +2,6 @@
 /elevateded
 /videos
 /test/Gradient descent for multiple linear regression.webm
-/__pycache__
+/__pycache__/
+/recommendation/__pycache__
 sql_ops.log
