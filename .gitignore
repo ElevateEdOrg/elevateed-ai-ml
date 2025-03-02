@@ -1,9 +1,10 @@
 .env
 /elevateded
+/quiz/__pycache__/
 /videos
 /test/Gradient descent for multiple linear regression.webm
 /__pycache__/
 /recommendation/__pycache__
 sql_ops.log
 /recommendation/__pycache__/
-/quiz/__pycache__/
+

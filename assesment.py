@@ -6,4 +6,4 @@ app = create_app()
 
 if __name__ == "__main__":
     # Run the Flask dev server
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0")
