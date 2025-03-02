@@ -21,6 +21,11 @@ def download_video_from_url(video_url: str, local_dir: str) -> str:
     filename = os.path.basename(video_url)
     local_path = os.path.join(local_dir, filename)
 
+    # Check if file already exists
+    if os.path.exists(local_path):
+        logging.info(f"File already exists at {local_path}. Skipping download.")
+        return local_path
+
     try:
         r = requests.get(video_url, stream=True)
         r.raise_for_status()

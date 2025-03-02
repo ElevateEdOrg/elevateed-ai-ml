@@ -28,6 +28,13 @@ class SqlOps:
                 host=self.db_host,
                 port=self.db_port
             )
+            # self.conn = psycopg2.connect(
+            #     dbname="Elevatedb",
+            #     user="postgres",
+            #     password="new_password",
+            #     host="localhost",
+            #     port="5432"
+            # )
             self.cursor = self.conn.cursor()
         except Exception as e:
             logging.error(f"Error connecting to database: {e}")
@@ -38,10 +45,12 @@ class SqlOps:
         """
         try:
             query = """
-                SELECT id, video_path
-                FROM lectures
-                WHERE course_id = %s
-                  AND video_path IS NOT NULL;
+               select lectures.id, lectures.video_path 
+                from lectures 
+                full join 
+                courses 
+                on courses.id = lectures.course_id
+                where lectures.course_id = %s	;
             """
             self.cursor.execute(query, (course_id,))
             rows = self.cursor.fetchall()
