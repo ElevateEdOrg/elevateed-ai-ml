@@ -11,9 +11,9 @@ This project provides two primary APIs for the Elevate Ed platform built with Dj
 ## Project Structure
 
 ```
-elevate_ed/
+elevate_ed_aiml/
 ├── manage.py
-├── elevate_ed/
+├── elevate_ed_aiml/
 │   ├── __init__.py
 │   ├── settings.py
 │   ├── urls.py
