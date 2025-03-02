@@ -15,8 +15,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.http import HttpResponse
+from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/recommendations', include("recommendation.urls")),
+    path('api/quiz', include("quiz.urls")),
+    path('', lambda request : HttpResponse('Welcome to ElevateED AI/ML services. use api/recommendations or api/quiz endpoints.')),
 ]
