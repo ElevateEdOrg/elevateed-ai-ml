@@ -34,9 +34,11 @@ class SqlOps:
     def fetch_lecture_paths_for_course(self, course_id: str) -> List[Tuple[str, str]]:
         try:
             query = """
-                SELECT id, video_path
-                FROM lectures
-                WHERE course_id = %s AND video_path IS NOT NULL;
+                select lectures.id, lectures.video_path 
+                from lectures 
+                full join courses 
+                on courses.id = lectures.course_id
+                where lectures.course_id = %s	;
             """
             self.cursor.execute(query, (course_id,))
             rows = self.cursor.fetchall()
