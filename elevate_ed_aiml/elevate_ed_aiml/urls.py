@@ -20,7 +20,7 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/recommendations', include("recommendation.urls")),
-    path('api/quiz', include("quiz.urls")),
+    path('api/recommendations/', include("recommendation.urls")),
+    path('api/quiz/', include("quiz.urls")),
     path('', lambda request : HttpResponse('Welcome to ElevateED AI/ML services. use api/recommendations or api/quiz endpoints.')),
 ]

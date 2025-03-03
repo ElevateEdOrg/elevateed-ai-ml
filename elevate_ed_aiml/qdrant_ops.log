@@ -1,0 +1,137 @@
+2025-03-03 18:32:27,123 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-03 18:32:27,128 - INFO - Use pytorch device_name: cpu
+2025-03-03 18:32:27,128 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-03 22:41:34,676 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-03 22:41:34,685 - INFO - Use pytorch device_name: cpu
+2025-03-03 22:41:34,685 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-03 22:45:05,656 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-03 22:45:05,662 - INFO - Use pytorch device_name: cpu
+2025-03-03 22:45:05,662 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-03 22:47:46,811 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-03 22:47:46,816 - INFO - Use pytorch device_name: cpu
+2025-03-03 22:47:46,816 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-03 22:48:13,763 - WARNING - Not Found: /favicon.ico
+2025-03-03 22:50:20,301 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-03 22:50:20,307 - INFO - Use pytorch device_name: cpu
+2025-03-03 22:50:20,307 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-03 22:53:41,965 - ERROR - Invalid HTTP_HOST header: '4d28-2406-b400-d11-34db-84e0-14c-534b-9694.ngrok-free.app'. You may need to add '4d28-2406-b400-d11-34db-84e0-14c-534b-9694.ngrok-free.app' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\utils\deprecation.py", line 128, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '4d28-2406-b400-d11-34db-84e0-14c-534b-9694.ngrok-free.app'. You may need to add '4d28-2406-b400-d11-34db-84e0-14c-534b-9694.ngrok-free.app' to ALLOWED_HOSTS.
+2025-03-03 22:53:42,135 - WARNING - Bad Request: /
+2025-03-03 22:53:42,936 - ERROR - Invalid HTTP_HOST header: '4d28-2406-b400-d11-34db-84e0-14c-534b-9694.ngrok-free.app'. You may need to add '4d28-2406-b400-d11-34db-84e0-14c-534b-9694.ngrok-free.app' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\utils\deprecation.py", line 128, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '4d28-2406-b400-d11-34db-84e0-14c-534b-9694.ngrok-free.app'. You may need to add '4d28-2406-b400-d11-34db-84e0-14c-534b-9694.ngrok-free.app' to ALLOWED_HOSTS.
+2025-03-03 22:53:42,953 - WARNING - Bad Request: /favicon.ico
+2025-03-03 22:59:50,491 - INFO - E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\elevate_ed_aiml\settings.py changed, reloading.
+2025-03-03 23:00:05,993 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-03 23:00:05,998 - INFO - Use pytorch device_name: cpu
+2025-03-03 23:00:05,998 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-03 23:00:22,197 - WARNING - Not Found: /favicon.ico
+2025-03-03 23:02:56,818 - INFO - E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\quiz\views.py changed, reloading.
+2025-03-03 23:03:10,979 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-03 23:03:10,982 - INFO - Use pytorch device_name: cpu
+2025-03-03 23:03:10,982 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-03 23:09:44,750 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-03 23:09:44,756 - INFO - Use pytorch device_name: cpu
+2025-03-03 23:09:44,756 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-03 23:12:20,795 - INFO - E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\recommendation\admin.py changed, reloading.
+2025-03-03 23:12:38,938 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-03 23:12:38,944 - INFO - Use pytorch device_name: cpu
+2025-03-03 23:12:38,944 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-03 23:14:38,692 - INFO - E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\elevate_ed_aiml\settings.py changed, reloading.
+2025-03-03 23:14:53,795 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-03 23:14:53,799 - INFO - Use pytorch device_name: cpu
+2025-03-03 23:14:53,799 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-03 23:15:15,860 - WARNING - Not Found: /favicon.ico
+2025-03-03 23:15:19,606 - WARNING - Not Found: /favicon.ico
+2025-03-03 23:18:35,350 - WARNING - Not Found: /api/recommendations/
+2025-03-03 23:20:21,745 - WARNING - Not Found: /api/recommendations/4f9e5423-ab90-414d-802e-1283e102bc50
+2025-03-03 23:20:34,652 - WARNING - Not Found: /api/recommendations/4f9e5423-ab90-414d-802e-1283e102bc50/
+2025-03-03 23:25:23,734 - INFO - E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\elevate_ed_aiml\urls.py changed, reloading.
+2025-03-03 23:25:39,700 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-03 23:25:39,704 - INFO - Use pytorch device_name: cpu
+2025-03-03 23:25:39,704 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-03 23:25:54,958 - ERROR - Internal Server Error: /api/recommendations/4f9e5423-ab90-414d-802e-1283e102bc50/
+Traceback (most recent call last):
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UndefinedTable: relation "recommendation_enrollment" does not exist
+LINE 1: SELECT 1 AS "a" FROM "recommendation_enrollment" LIMIT 1
+                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\recommendation\views.py", line 35, in recommendations
+    recommended_courses = get_recommendations_for_user(user_id)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\recommendation\services.py", line 23, in get_recommendations_for_user
+    if not enrollments.exists():
+           ^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\db\models\query.py", line 1288, in exists
+    return self.query.has_results(using=self.db)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\db\models\sql\query.py", line 660, in has_results
+    return compiler.has_results()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\db\models\sql\compiler.py", line 1542, in has_results
+    return bool(self.execute_sql(SINGLE))
+                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\db\models\sql\compiler.py", line 1574, in execute_sql
+    cursor.execute(sql, params)
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.ProgrammingError: relation "recommendation_enrollment" does not exist
+LINE 1: SELECT 1 AS "a" FROM "recommendation_enrollment" LIMIT 1
+                             ^
+
+2025-03-03 23:34:21,131 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-03 23:34:21,137 - INFO - Use pytorch device_name: cpu
+2025-03-03 23:34:21,138 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-03 23:35:16,319 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-03 23:35:16,326 - INFO - Use pytorch device_name: cpu
+2025-03-03 23:35:16,326 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
