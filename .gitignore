@@ -8,3 +8,6 @@
 sql_ops.log
 /recommendation/__pycache__/
 
+/elevate_ed_aiml/elevate_ed_aiml/__pycache__
+/elevate_ed_aiml/quiz/__pycache__/
+/elevate_ed_aiml/recommendation/__pycache__
