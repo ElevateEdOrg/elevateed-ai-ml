@@ -1,14 +1,22 @@
-import os
-import json
+import re
 import logging
-import time
+import json
+import random
+import numpy as np
+import nltk
 from datetime import datetime
 from typing import Any, Dict, List, Union
 from groq import Groq
-import re
 import qdrant_client
+from qdrant_client import QdrantClient
 from qdrant_client.models import PointStruct, Filter, FieldCondition, MatchValue
 from sentence_transformers import SentenceTransformer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from nltk.tokenize import sent_tokenize
+from nltk.corpus import stopwords
+
+nltk.download('punkt')
+nltk.download('stopwords')
 
 class QuizParser:
     """Parses raw quiz text into structured JSON format."""
@@ -78,10 +86,10 @@ class QuizParser:
         return questions
 
 class MCQGenerator:
-    def __init__(self, api_key: str, qdrant_url: str, qdrant_collection: str, logger: logging.Logger = None):
+    def __init__(self, api_key: str, qdrant_url: str, qdrant_collection: str, logger: logging.Logger = None) -> None:
         self.logger = logger or logging.getLogger(__name__)
         self.groq_client = Groq(api_key=api_key)
-        self.qdrant_client = qdrant_client.QdrantClient(qdrant_url)
+        self.qdrant_client = QdrantClient(qdrant_url)
         self.qdrant_collection = qdrant_collection
         self.embedding_model = SentenceTransformer("all-mpnet-base-v2")
         self.quiz_parser = QuizParser()
@@ -97,58 +105,64 @@ class MCQGenerator:
         retrieved_texts = [hit.payload["text"] for hit in search_results]
         return " ".join(retrieved_texts)
     
-    def build_prompt(self, content: str, num_questions: int = 5) -> str:
-        self.logger.info("Building MCQ prompt")
-        return f"""
-Generate {num_questions} multiple-choice questions (MCQs) strictly based on the following content. Each question should be directly answerable solely from the information provided below and should not incorporate any external or inferred details.
-
-Content:
-{content}
-
-Ensure each question:
-- Is derived exclusively from the provided text.
-- Covers different aspects of the content.
-- Varies in difficulty (Easy, Medium, Hard).
-- Tests factual recall or understanding of details present in the content.
-
-Format each question as:
-Question:
-[Question text]
-(A) Option 1
-(B) Option 2
-(C) Option 3
-(D) Option 4
-Correct Answer: (Whole option, e.g., (A))
-Explanation: Brief explanation of the correct answer
-Difficulty: [Easy/Medium/Hard]
-
-Separate each question with a line containing exactly '---'
-        """
-
+    def preprocess_text(self, text: str) -> str:
+        return text.strip()
+    
+    def extract_sentences(self, text: str) -> List[str]:
+        return sent_tokenize(text)
+    
+    def compute_tfidf(self, sentences: List[str]):
+        vectorizer = TfidfVectorizer(stop_words='english', ngram_range=(1, 2))
+        tfidf_matrix = vectorizer.fit_transform(sentences)
+        feature_names = vectorizer.get_feature_names_out()
+        return tfidf_matrix, feature_names, vectorizer
+    
     def generate_mcqs(self, query: str, num_questions: int = 5) -> Dict[str, Union[str, List[Dict[str, Any]]]]:
         relevant_content = self.search_transcript_in_qdrant(query)
         if not relevant_content.strip():
             self.logger.error("No relevant content found for quiz generation.")
             return {"status": "error", "message": "No relevant content found for quiz generation."}
         
-        prompt = self.build_prompt(relevant_content, num_questions)
-        try:
-            response = self.groq_client.chat.completions.create(
-                model="mixtral-8x7b-32768",
-                messages=[{"role": "user", "content": prompt}]
-            )
-            if not response or not response.choices:
-                self.logger.error("Failed to generate MCQs.")
-                return {"status": "error", "message": "Failed to generate MCQs."}
+        sentences = self.extract_sentences(relevant_content)
+        tfidf_matrix, feature_names, _ = self.compute_tfidf(sentences)
+        
+        tfidf_sum = np.squeeze(np.asarray(tfidf_matrix.sum(axis=0)))
+        keywords_scores = list(zip(feature_names, tfidf_sum))
+        keywords_scores.sort(key=lambda x: x[1], reverse=True)
+        top_keywords = [kw for kw, score in keywords_scores[:10]]
+        
+        mcqs = []
+        for i, sentence in enumerate(sentences):
+            row = tfidf_matrix[i].toarray().flatten()
+            if row.max() == 0:
+                continue
+            max_index = row.argmax()
+            correct_keyword = feature_names[max_index]
+            if correct_keyword.lower() not in sentence.lower():
+                continue
             
-            quiz_text = response.choices[0].message.content
-            print(quiz_text) # for debugging.
-            quiz_structured = self.quiz_parser.parse(quiz_text)
-            metadata = {
-                "generated_at": datetime.now().isoformat(),
-                "num_questions": num_questions
+            question_text = sentence.replace(correct_keyword, "______", 1)
+            correct_answer = correct_keyword
+            
+            distractor_pool = [kw for kw in top_keywords if kw.lower() != correct_keyword.lower()]
+            if len(distractor_pool) < 3:
+                continue
+            distractors = random.sample(distractor_pool, 3)
+            
+            options = [correct_answer] + distractors
+            random.shuffle(options)
+            option_labels = ['A', 'B', 'C', 'D']
+            options_dict = {label: opt for label, opt in zip(option_labels, options)}
+            correct_label = [label for label, opt in options_dict.items() if opt == correct_answer][0]
+            
+            mcq = {
+                "question": question_text,
+                "options": options_dict,
+                "correct_answer": correct_label,
+                "explanation": f"The blank was filled by the keyword '{correct_answer}', extracted using TF-IDF."
             }
-            return {"status": "success", "quiz": quiz_structured, "metadata": metadata}
-        except Exception as e:
-            self.logger.error(f"Quiz generation failed: {str(e)}")
-            return {"status": "error", "message": f"Quiz generation failed: {str(e)}"}
+            mcqs.append(mcq)
+            if len(mcqs) >= num_questions:
+                break
+        
+        return {"status": "success", "quiz": mcqs, "metadata": {"generated_at": datetime.now().isoformat()}}
