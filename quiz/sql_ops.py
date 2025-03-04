@@ -50,7 +50,8 @@ class SqlOps:
                 full join 
                 courses 
                 on courses.id = lectures.course_id
-                where lectures.course_id = %s	;
+                where lectures.course_id = %s
+                and lectures.video_path is not null	;
             """
             self.cursor.execute(query, (course_id,))
             rows = self.cursor.fetchall()
