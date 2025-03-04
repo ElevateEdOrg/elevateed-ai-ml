@@ -1,14 +1,13 @@
-# recommendation/services.py
-
 import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from recommendation.database import db
 from recommendation.models import Enrollment
 
-def get_recommendations_for_user(user_id, top_n=5, rating_threshold=2.5):
+def get_recommendations_for_user(user_id, top_n=5, rating_threshold=1.0):
     """
     Build a user-based CF system to recommend courses for a given user_id.
+    If the user is new (cold start problem), fallback to popular courses.
     """
 
     # 1. Query all enrollments
@@ -28,13 +27,11 @@ def get_recommendations_for_user(user_id, top_n=5, rating_threshold=2.5):
         })
     df = pd.DataFrame(data)
 
-    # Quick check: if the user_id does not appear in df
+    # If the user_id does not exist in df, apply cold start strategy
     if str(user_id) not in df['user_id'].unique():
-        # Return empty or handle new user scenario
-        return []
+        return get_popular_courses(df, top_n)
 
     # 3. Preprocessing (normalize & compute final_rating)
-    # Assuming max quiz score = 50, max progress = 100, rating scale = 1-5
     df['normalized_student_score'] = df['student_score'] / 50.0
     df['normalized_progress'] = df['progress'] / 100.0
 
@@ -62,12 +59,8 @@ def get_recommendations_for_user(user_id, top_n=5, rating_threshold=2.5):
 
     # 6. Find top similar users
     target_user = str(user_id)
-    sim_scores = user_similarity_df.loc[target_user]
-    # Drop self-similarity
-    sim_scores = sim_scores.drop(target_user)
-    # Sort descending
-    sim_scores = sim_scores.sort_values(ascending=False)
-    top_sim_users = sim_scores.head(3).index  # top 3 similar
+    sim_scores = user_similarity_df.loc[target_user].drop(target_user).sort_values(ascending=False)
+    top_sim_users = sim_scores.head(5).index  # Top 3 similar users
 
     # 7. Check which courses target user has
     target_user_ratings = user_course_matrix.loc[target_user]
@@ -76,11 +69,26 @@ def get_recommendations_for_user(user_id, top_n=5, rating_threshold=2.5):
     recommended_courses = []
     for sim_user in top_sim_users:
         sim_user_ratings = user_course_matrix.loc[sim_user]
-        # recommended if sim_user_ratings > threshold AND target_user has not rated them
         high_rated = sim_user_ratings[(sim_user_ratings > rating_threshold) & (target_user_ratings == 0)]
         recommended_courses.extend(high_rated.index.tolist())
 
     # Remove duplicates, limit to top_n
     final_recommendations = list(set(recommended_courses))[:top_n]
 
+    # If no recommendations found, fallback to popular courses
+    if not final_recommendations:
+        return get_popular_courses(df, top_n)
+
     return final_recommendations
+
+
+def get_popular_courses(df, top_n=5):
+    course_popularity = df.groupby('course_id').agg(
+        enrollments=('user_id', 'count'),
+        avg_rating=('course_rating', 'mean')
+    )
+    course_popularity['popularity_score'] = (0.7 * course_popularity['avg_rating']) + (0.3 * course_popularity['enrollments'])
+    popular_courses = course_popularity.sort_values(by='popularity_score', ascending=False).index.tolist()
+
+    return popular_courses[:max(top_n, len(popular_courses))]  # Ensure at least `top_n` courses
+

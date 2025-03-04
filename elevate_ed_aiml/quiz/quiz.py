@@ -88,9 +88,18 @@ Separate each question with a line containing exactly '---'
     
     def generate_mcqs(self, topic: str, num_questions: int = 10, top_k: int = 3) -> Dict[str, Union[str, List[Dict[str, Any]]]]:
         relevant_content = self.search_transcript_in_qdrant(topic, top_k)
-        if not relevant_content.strip():
+        # Convert list to string before calling .strip()
+        if isinstance(relevant_content, list):
+            relevant_content = " ".join(relevant_content).strip()
+        else:
+            relevant_content = relevant_content.strip()
+
+        if not relevant_content:
             logging.error("No relevant content found for quiz generation.")
             return {"status": "error", "message": "No relevant content found for quiz generation."}
+        # if not relevant_content.strip():
+        #     logging.error("No relevant content found for quiz generation.")
+        #     return {"status": "error", "message": "No relevant content found for quiz generation."}
         prompt = self.build_prompt(relevant_content, topic, num_questions)
         try:
             response = self.groq_client.chat.completions.create(

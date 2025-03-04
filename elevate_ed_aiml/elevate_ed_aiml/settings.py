@@ -87,11 +87,11 @@ WSGI_APPLICATION = 'elevate_ed_aiml.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv("DB_NAME"),
-        'USER': os.getenv("DB_USER"),
-        'PASSWORD': os.getenv("DB_PASSWORD"),
-        'HOST': os.getenv("DB_HOST"),
-        'PORT': os.getenv("DB_PORT"),        
+        'NAME': 'Elevatedb',
+        'USER': 'postgres',
+        'PASSWORD': '300282',
+        'HOST': '192.168.10.49',
+        'PORT': '5432',        
     }
 }
 

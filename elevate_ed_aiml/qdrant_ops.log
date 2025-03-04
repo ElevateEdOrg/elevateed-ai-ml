@@ -135,3 +135,149 @@ LINE 1: SELECT 1 AS "a" FROM "recommendation_enrollment" LIMIT 1
 2025-03-03 23:35:16,319 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
 2025-03-03 23:35:16,326 - INFO - Use pytorch device_name: cpu
 2025-03-03 23:35:16,326 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-04 09:44:50,251 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-04 09:44:50,261 - INFO - Use pytorch device_name: cpu
+2025-03-04 09:44:50,261 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-04 09:44:59,315 - WARNING - Not Found: /favicon.ico
+2025-03-04 09:46:37,810 - WARNING - Not Found: /api/recommendation/4f9e5423-ab90-414d-802e-1283e102bc50/
+2025-03-04 10:04:41,271 - INFO - E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\recommendation\services.py changed, reloading.
+2025-03-04 10:05:05,778 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-04 10:05:05,788 - INFO - Use pytorch device_name: cpu
+2025-03-04 10:05:05,788 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-04 10:08:40,014 - INFO - E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\recommendation\services.py changed, reloading.
+2025-03-04 10:08:55,955 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-04 10:08:55,960 - INFO - Use pytorch device_name: cpu
+2025-03-04 10:08:55,960 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-04 10:09:01,804 - ERROR - Internal Server Error: /api/recommendations/0b745e10-8cdc-4593-ae4c-000633033109/
+Traceback (most recent call last):
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\recommendation\views.py", line 35, in recommendations
+    recommended_courses = get_recommendations_for_user(user_id)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\recommendation\services.py", line 47, in get_recommendations_for_user
+    df['normalized_student_score'] = df['student_score'] / 50.0
+                                     ~~^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\pandas\core\frame.py", line 4102, in __getitem__
+    indexer = self.columns.get_loc(key)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\pandas\core\indexes\range.py", line 417, in get_loc
+    raise KeyError(key)
+KeyError: 'student_score'
+2025-03-04 10:11:29,372 - INFO - E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\recommendation\services.py changed, reloading.
+2025-03-04 10:11:49,610 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-04 10:11:49,615 - INFO - Use pytorch device_name: cpu
+2025-03-04 10:11:49,615 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-04 10:12:49,861 - INFO - E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\recommendation\services.py changed, reloading.
+2025-03-04 10:13:07,128 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-04 10:13:07,134 - INFO - Use pytorch device_name: cpu
+2025-03-04 10:13:07,134 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-04 10:13:17,803 - ERROR - Internal Server Error: /api/recommendations/0b745e10-8cdc-4593-ae4c-000633033109/
+Traceback (most recent call last):
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\recommendation\views.py", line 35, in recommendations
+    recommended_courses = get_recommendations_for_user(user_id)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\recommendation\services.py", line 47, in get_recommendations_for_user
+    df['normalized_student_score'] = df['student_score'] / 50.0
+                                     ~~^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\pandas\core\frame.py", line 4102, in __getitem__
+    indexer = self.columns.get_loc(key)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\pandas\core\indexes\range.py", line 417, in get_loc
+    raise KeyError(key)
+KeyError: 'student_score'
+2025-03-04 10:15:41,042 - INFO - E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\recommendation\services.py changed, reloading.
+2025-03-04 10:15:58,010 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-04 10:15:58,015 - INFO - Use pytorch device_name: cpu
+2025-03-04 10:15:58,015 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-04 10:19:11,041 - INFO - E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\recommendation\services.py changed, reloading.
+2025-03-04 10:19:31,140 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-04 10:19:31,146 - INFO - Use pytorch device_name: cpu
+2025-03-04 10:19:31,147 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-04 10:20:35,694 - INFO - E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\recommendation\services.py changed, reloading.
+2025-03-04 10:20:55,711 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-04 10:20:55,719 - INFO - Use pytorch device_name: cpu
+2025-03-04 10:20:55,720 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-04 10:33:44,497 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-04 10:33:44,506 - INFO - Use pytorch device_name: cpu
+2025-03-04 10:33:44,506 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-04 10:34:49,734 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-04 10:34:49,742 - INFO - Use pytorch device_name: cpu
+2025-03-04 10:34:49,742 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-04 10:38:41,266 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-04 10:38:41,273 - INFO - Use pytorch device_name: cpu
+2025-03-04 10:38:41,273 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-04 10:39:06,933 - WARNING - Not Found: /favicon.ico
+2025-03-04 10:39:31,646 - WARNING - Not Found: /recommendations/0b745e10-8cdc-4593-ae4c-000633033109/
+2025-03-04 10:56:36,027 - INFO - E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\recommendation\models.py changed, reloading.
+2025-03-04 10:59:38,420 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-04 10:59:38,422 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-04 10:59:38,428 - INFO - Use pytorch device_name: cpu
+2025-03-04 10:59:38,428 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-04 10:59:38,428 - INFO - Use pytorch device_name: cpu
+2025-03-04 10:59:38,428 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-04 11:01:08,805 - WARNING - Not Found: /api/quiz/83c94b40-9dc0-4253-b83c-b82218156493/
+2025-03-04 11:01:37,451 - INFO - HTTP Request: POST http://localhost:6333/collections/course_83c94b40-9dc0-4253-b83c-b82218156493/points/search "HTTP/1.1 200 OK"
+2025-03-04 11:01:37,626 - ERROR - Internal Server Error: /api/quiz/generate_quiz_for_course/83c94b40-9dc0-4253-b83c-b82218156493/
+Traceback (most recent call last):
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\quiz\views.py", line 13, in generate_quiz_for_course
+    result = mcq_gen.generate_mcqs(topic="Generate a comprehensive quiz for the course", num_questions=10)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\quiz\quiz.py", line 91, in generate_mcqs
+    if not relevant_content.strip():
+           ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'list' object has no attribute 'strip'
+2025-03-04 11:15:03,969 - INFO - E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\quiz\quiz.py changed, reloading.
+2025-03-04 11:15:04,486 - INFO - E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\quiz\quiz.py changed, reloading.
+2025-03-04 11:15:29,770 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-04 11:15:29,776 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-04 11:15:29,780 - INFO - Use pytorch device_name: cpu
+2025-03-04 11:15:29,780 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-04 11:15:29,783 - INFO - Use pytorch device_name: cpu
+2025-03-04 11:15:29,784 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-04 11:16:47,667 - WARNING - Not Found: /favicon.ico
+2025-03-04 11:16:58,995 - INFO - HTTP Request: POST http://localhost:6333/collections/course_83c94b40-9dc0-4253-b83c-b82218156493/points/search "HTTP/1.1 200 OK"
+2025-03-04 11:17:01,083 - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-04 11:37:08,311 - INFO - E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\quiz\views.py changed, reloading.
+2025-03-04 11:37:08,778 - INFO - E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\quiz\views.py changed, reloading.
+2025-03-04 11:37:39,269 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-04 11:37:39,269 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-04 11:37:39,278 - INFO - Use pytorch device_name: cpu
+2025-03-04 11:37:39,278 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-04 11:37:39,278 - INFO - Use pytorch device_name: cpu
+2025-03-04 11:37:39,278 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-04 11:41:03,105 - INFO - E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\quiz\models.py changed, reloading.
+2025-03-04 11:41:03,417 - INFO - E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevate_ed_aiml\quiz\models.py changed, reloading.
+2025-03-04 11:41:31,009 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-04 11:41:31,017 - INFO - Use pytorch device_name: cpu
+2025-03-04 11:41:31,017 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-04 11:41:31,108 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-04 11:41:31,115 - INFO - Use pytorch device_name: cpu
+2025-03-04 11:41:31,115 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-04 11:42:45,398 - INFO - E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\db\models\fields\__init__.py changed, reloading.
+2025-03-04 11:42:45,730 - INFO - E:\Wappnet internship\ElevateEdOrg\New folder\elevateed-ai-ml\elevateded\Lib\site-packages\django\db\models\fields\__init__.py changed, reloading.
+2025-03-04 11:47:05,731 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-04 11:47:05,740 - INFO - Use pytorch device_name: cpu
+2025-03-04 11:47:05,740 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-04 11:51:36,448 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-04 11:51:36,455 - INFO - Use pytorch device_name: cpu
+2025-03-04 11:51:36,455 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2
+2025-03-04 11:57:14,846 - INFO - HTTP Request: GET http://localhost:6333 "HTTP/1.1 200 OK"
+2025-03-04 11:57:14,853 - INFO - Use pytorch device_name: cpu
+2025-03-04 11:57:14,853 - INFO - Load pretrained SentenceTransformer: all-mpnet-base-v2

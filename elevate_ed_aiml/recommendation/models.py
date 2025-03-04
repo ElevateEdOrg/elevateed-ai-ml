@@ -110,23 +110,6 @@ class Enrollment(models.Model):
     def __str__(self):
         return f"{self.user} enrolled in {self.course}"
 
-class Assessment(models.Model):
-    """
-    Represents an assessment (quiz) for a course.
-    
-    Fields:
-      - id: UUID primary key.
-      - course: ForeignKey to Course.
-      - assessment_data: JSON data containing the quiz details.
-      - created_at: Timestamp when the assessment was created.
-    """
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='assessments')
-    assessment_data = models.JSONField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Assessment for {self.course.title}"
 
 class Lecture(models.Model):
     """
@@ -151,3 +134,24 @@ class Lecture(models.Model):
 
     def __str__(self):
         return self.title
+
+class Assessment(models.Model):
+    """
+    Represents an assessment (quiz) for a course.
+    
+    Fields:
+      - id: UUID primary key.
+      - course: ForeignKey to Course.
+      - assessment_data: JSON data containing the quiz details.
+      - created_at: Timestamp when the assessment was created.
+    """
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='assessments')
+    assessment_data = models.JSONField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    lecture_id = models.ForeignKey(Lecture, on_delete=models.CASCADE, related_name='assessments')
+
+
+    def __str__(self):
+        return f"Assessment for {self.course.title}"
+
