@@ -1,108 +1,162 @@
-# Quiz & Recommendation Cron Job Service
+# Elevate Ed APIs (Flask Version)
 
-## Overview
-This microservice is part of an AI-powered EdTech platform that automates the generation of quiz assessments and personalized learning recommendations from course videos. It operates as a scheduled cron job that:
-- Transcribes course videos using OpenAI Whisper
-- Generates quizzes from transcripts using Groq LLM
-- Updates personalized learning recommendations based on content analysis
+This project provides two primary APIs for the Elevate Ed platform built with Flask:
 
-## Key Features
-- **Automated Video Transcription**: Converts course videos to text using Whisper
-- **AI-Driven Quiz Generation**: Creates multiple-choice questions from transcript content
-- **Recommendation Updates**: Processes quiz data to update personalized learning paths
-- **Scheduled Execution**: Runs periodically to process the latest course content
+1. **Recommendation API**  
+   Returns course recommendations based on user data. (Dummy implementation; replace with your actual logic.)
 
-## Tech Stack
-- **Language**: Python 3.x
-- **Core Libraries**:
-  - Whisper - Video transcription
-  - Groq API - LLM-based quiz generation
-  - psycopg2 - PostgreSQL database integration
-  - schedule - Cron-like job scheduling
-- **Database**: PostgreSQL
+2. **Quiz API**  
+   Generates multiple-choice quizzes for courses by aggregating lecture transcript content, searching transcript embeddings in Qdrant, and using the Groq API to generate MCQs. It also supports video transcription using Whisper and video downloading if needed.
 
-## Directory Structure
+## Project Structure
+
 ```
-your_project/
-├── repo/
-│   ├── videos/            # Course video storage
-│   ├── transcription/     # Transcript and quiz JSON files
-│   ├── sql_ops.py         # Database operations
-│   ├── quiz.py            # Quiz generation using Groq LLM
-│   ├── cron_job.py        # Main service file
-│   ├── requirements.txt   # Dependencies
-│   ├── config.py          # Configuration settings
-│   └── README.md          # Project documentation
+ELEVATEED-AI-ML/
+├── app.py
+├── config.py
+├── requirements.txt
+├── recommendation/
+│   ├── __init__.py
+│   ├── routes.py
+│   ├── services.py
+├── quiz/
+│   ├── __init__.py
+│   ├── routes.py
+│   ├── quiz.py
+│   ├── qdrant_ops.py
+│   ├── transcription.py
+│   ├── video_download.py
+│   ├── sql_ops.py
+├── test_files/
+├── research/
+└── README.md
 ```
+
+## Prerequisites
+
+- Python 3.8+
+- PostgreSQL database (with tables for lectures, assessments, etc.)
+- Qdrant server running (default: http://localhost:6333)
+- Groq API access (or an alternative)
+- Whisper for transcription (if using video transcription)
+- Required Python packages:
+  - Flask
+  - Flask-RESTful
+  - psycopg2-binary
+  - requests
+  - sentence-transformers
+  - qdrant-client
+  - groq
+  - whisper
+  - python-dotenv
+  - flasgger (for Swagger documentation, optional)
 
 ## Setup & Installation
 
-1. **Clone the Repository**:
+1. **Clone the repository:**
    ```bash
    git clone https://github.com/ElevateEdOrg/elevateed-ai-ml.git
-   cd your_project
+   cd elevate_ed_flask
    ```
 
-2. **Install Dependencies**:
+2. **Create and activate a virtual environment:**
+   ```bash
+   python -m venv venv
+   # On Linux/MacOS:
+   source venv/bin/activate
+   # On Windows:
+   venv\Scripts\activate
+   ```
+
+3. **Install dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Configure Settings**:
-   Update `config.py` with required credentials:
-   - Database connection details
-   - Groq API key
-   - File paths and other settings
+4. **Configure Environment Variables:** Create a `.env` file in the project root with:
+   ```env
+   SECRET_KEY=your_secret_key
 
-## How It Works
+   # Recommendation API config
+   DB_HOST=your_db_host
+   DB_PORT=your_db_port
+   DB_NAME=your_db_name
+   DB_USER=your_db_user
+   DB_PASSWORD=your_db_password
 
-1. **Transcription Process**:
-   - Service scans the videos directory for new content
-   - Each video is transcribed and saved as a text file
+   # Quiz API config
+   GROQ_API_KEY=your_groq_api_key
+   QDRANT_URL=http://localhost:6333
+   TRANSCRIPT_OUTPUT_DIR=/tmp/transcripts
+   ```
 
-2. **Quiz Generation**:
-   - For each transcript, the service generates a quiz in JSON format
-   - Questions are tailored to the educational content
+5. **Run the Server:**
+   ```bash
+   python app.py
+   ```
 
-3. **Database Operations**:
-   - Quiz data is inserted into PostgreSQL
-   - Recommendation algorithms process content relationships
+## API Endpoints
 
-4. **Scheduling**:
-   - The entire workflow runs on a configurable schedule
+### Recommendation API:
+- `GET /api/recommendations/<user_id>/`
+  Returns course recommendations for the specified user.
 
-## Running the Service
+### Quiz API:
+- `POST /api/quiz/generate_quiz_for_course/<course_id>/`
+  Generates a quiz for the specified course by aggregating lecture transcripts, performing Qdrant searches, and using Groq to generate MCQs.
 
-**Manual Execution**:
-```bash
-python cron_job.py
-```
+## Testing with Swagger
 
-**System Scheduler**:
-Configure your system's task scheduler to execute the script at desired intervals:
-- Linux: Use crontab
-- Windows: Use Task Scheduler
+To test your APIs with Swagger UI using flasgger:
 
-## Logging & Monitoring
-Operations are logged to `cron_job.log` for debugging and monitoring purposes.
+1. **Ensure flasgger is installed:**
+   ```bash
+   pip install flasgger
+   ```
+
+2. **Swagger UI is available at:**
+   ```
+   http://127.0.0.1:5000/apidocs/
+   ```
 
 ## Future Enhancements
-- Advanced recommendation algorithms
-- Multi-format content support
-- Performance optimization for large video libraries
 
-## Contact
-For questions or contributions, please contact the project team or create an issue in the repository.
+* Advanced recommendation algorithms using collaborative filtering and content-based methods
+* Multi-format content support (PDFs, interactive slides, audio files)
+* Performance optimization for large video libraries
+* Integration with learning analytics dashboard
+* Mobile-friendly API endpoints
 
 ## Contribution Guidelines
-- Follow best practices for Flask API development.
-- Ensure proper logging and error handling.
-- Submit feature updates via pull requests.
+
+* Follow best practices for Flask development
+* Ensure proper logging and error handling
+* Write tests for new features
+* Document all APIs using docstrings and update Swagger
+* Submit feature updates via pull requests
+* Follow PEP 8 style guidelines
+
+## Contact
+
+For questions or contributions, please contact the project team or create an issue in the repository.
 
 ## License
-This project is licensed under the **MIT License**.
 
----
+This project is licensed under the **MIT License**.
 
 **Author**: Harsh Dadiya  
 **Role**: AI/ML Developer
+
+---
+
+## Final Notes
+
+- This Flask project mirrors the functionality of the Django version.
+- The Recommendation API returns dummy recommendations (update as needed).
+- The Quiz API uses your existing quiz generation logic (Groq, Qdrant, Whisper, etc.) with the same endpoints and response format.
+- Use Flasgger for interactive testing and Swagger documentation.
+- Start the server with `python app.py` and test endpoints at:
+  - `http://127.0.0.1:5000/api/recommendations/<user_id>/`
+  - `http://127.0.0.1:5000/api/quiz/generate_quiz_for_course/<course_id>/`
+  - Swagger UI at `http://127.0.0.1:5000/apidocs/` (if configured).
+
