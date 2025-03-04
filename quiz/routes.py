@@ -95,11 +95,11 @@ def generate_quiz_for_course(course_id):
             transcript_path=transcript_path
         )
 
-        # Cleanup transcript
-        try:
-            os.remove(transcript_path)
-        except:
-            pass
+        # # Cleanup transcript
+        # try:
+        #     os.remove(transcript_path)
+        # except:
+        #     pass
 
     # Now generate MCQs for the entire course
     mcq_gen = MCQGenerator(
@@ -134,10 +134,10 @@ def generate_quiz_for_course(course_id):
     sql_ops.close()
 
     # Cleanup quiz file
-    try:
-        os.remove(temp_quiz_file)
-    except:
-        pass
+    # try:
+    #     os.remove(temp_quiz_file)
+    # except:
+    #     pass
 
     return jsonify({
         "status": "success",

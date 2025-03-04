@@ -1,14 +1,11 @@
-# recommendation/routes.py
-
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from flasgger.utils import swag_from
 from recommendation.services import get_recommendations_for_user
 
 recommendation_blueprint = Blueprint('recommendation', __name__)
 
-@recommendation_blueprint.route('/recommendations/<uuid:user_id>', methods=['GET'])
+@recommendation_blueprint.route('/recommendations', methods=['GET'])
 @swag_from({
-
     'responses': {
         200: {
             'description': 'Return recommended course IDs for the user',
@@ -23,7 +20,7 @@ recommendation_blueprint = Blueprint('recommendation', __name__)
     'parameters': [
         {
             'name': 'user_id',
-            'in': 'path',
+            'in': 'query',
             'type': 'string',
             'format': 'uuid',
             'required': True,
@@ -32,7 +29,7 @@ recommendation_blueprint = Blueprint('recommendation', __name__)
     ],
     'tags': ['Recommendations']
 })
-def get_recommendations(user_id):
+def get_recommendations():
     """
     Get course recommendations for a specific user.
 
@@ -42,9 +39,21 @@ def get_recommendations(user_id):
     ---
     produces:
       - "application/json"
+    parameters:
+      - name: user_id
+        in: query
+        type: string
+        format: uuid
+        required: true
+        description: UUID of the user
     """
+    user_id = request.args.get('user_id')
+
+    if not user_id:
+        return jsonify({'error': 'user_id is required'}), 400
+
     recommendations = get_recommendations_for_user(user_id)
     return jsonify({
-        'user_id': str(user_id),
+        'user_id': user_id,
         'recommendations': recommendations
     })
