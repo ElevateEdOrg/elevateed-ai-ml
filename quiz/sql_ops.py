@@ -72,6 +72,8 @@ class SqlOps:
                 query = """
                     INSERT INTO assessments (course_id, assessment_data)
                     VALUES (%s, %s)
+                    ON CONFLICT (course_id)
+                    DO UPDATE SET assessment_data = EXCLUDED.assessment_data
                     RETURNING id;
                 """
                 self.cursor.execute(query, (course_id, json.dumps(data)))
