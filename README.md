@@ -3,7 +3,7 @@
 This project provides two primary APIs for the Elevate Ed platform built with Flask:
 
 1. **Recommendation API**  
-   Returns course recommendations based on user data. (Dummy implementation; replace with your actual logic.)
+   Returns course recommendations based on user data.
 
 2. **Quiz API**  
    Generates multiple-choice quizzes for courses by aggregating lecture transcript content, searching transcript embeddings in Qdrant, and using the Groq API to generate MCQs. It also supports video transcription using Whisper and video downloading if needed.
@@ -151,8 +151,6 @@ This project is licensed under the **MIT License**.
 
 ## Final Notes
 
-- This Flask project mirrors the functionality of the Django version.
-- The Recommendation API returns dummy recommendations (update as needed).
 - The Quiz API uses your existing quiz generation logic (Groq, Qdrant, Whisper, etc.) with the same endpoints and response format.
 - Use Flasgger for interactive testing and Swagger documentation.
 - Start the server with `python app.py` and test endpoints at:
