@@ -16,3 +16,6 @@ sql_ops.log
 
 /tets_files/__pycache__/
 /research/2103.14757v1.pdf
+/env/
+/venv/
+/quiz/__pycache__/
