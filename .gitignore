@@ -19,3 +19,5 @@ sql_ops.log
 /env/
 /venv/
 /quiz/__pycache__/
+/t5.ipynb
+/quiz/__pycache__/
