@@ -214,12 +214,14 @@ def generate_quiz_for_lecture():
     if not course_id or not lecture_id or not video_path:
         return jsonify({"status": "error", "message": "Missing required fields"}), 400
 
-    local_dir = "E:\\Wappnet internship\\ElevateEdOrg"
+    local_dir = "/home/ubuntu/quiz_data"  # Updated for Linux environment
     local_video_path = video_path
+
     if video_path.startswith("http"):
         local_video_path = download_video_from_url(video_path, local_dir)
         if not local_video_path:
             return jsonify({"status": "error", "message": "Video download failed"}), 500
+
 
     # Transcribe
     transcript_filename = f"{uuid.uuid4()}.txt"
