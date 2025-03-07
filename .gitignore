@@ -21,3 +21,5 @@ sql_ops.log
 /quiz/__pycache__/
 /t5.ipynb
 /quiz/__pycache__/
+
+video_download.log

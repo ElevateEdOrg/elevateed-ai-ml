@@ -28,3 +28,6 @@ class Config:
     # QDRANT
     QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
 
+    CELERY_BROKER_URL = 'redis://localhost:6379/0'
+
+

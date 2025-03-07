@@ -146,17 +146,135 @@
 
 
 
-import os
+# import os
+# import uuid
+# from flask import Blueprint, jsonify, request
+# from flasgger import swag_from
+
+# from quiz.config import Config
+# from quiz.sql_ops import SqlOps
+# from quiz.video_download import download_video_from_url
+# from quiz.transcription import transcribe_video
+# from quiz.qdrant_ops import store_transcript_in_qdrant
+# from quiz.quiz import MCQGenerator
+
+# quiz_blueprint = Blueprint('quiz', __name__)
+
+# @quiz_blueprint.route('/generate_quiz_for_lecture', methods=['POST'])
+# @swag_from({
+#     'tags': ['Quiz Generation'],
+#     'parameters': [
+#         {
+#             'name': 'body',
+#             'in': 'body',
+#             'required': True,
+#             'schema': {
+#                 'type': 'object',
+#                 'properties': {
+#                     'course_id': {'type': 'string', 'format': 'uuid'},
+#                     'lecture_id': {'type': 'string', 'format': 'uuid'},
+#                     'video_path': {'type': 'string'}
+#                 },
+#                 'required': ['course_id', 'lecture_id', 'video_path']
+#             }
+#         }
+#     ],
+#     'responses': {
+#         200: {
+#             'description': 'Quiz generated successfully',
+#             'examples': {
+#                 'application/json': {
+#                     'status': 'success',
+#                     'message': 'Quiz generated and stored in DB'
+#                 }
+#             }
+#         },
+#         400: {
+#             'description': 'Bad Request'
+#         },
+#         500: {
+#             'description': 'Internal Server Error'
+#         }
+#     }
+# })
+# def generate_quiz_for_lecture():
+#     """
+#     Generates a quiz for the given lecture by:
+#     1) Downloading the video locally (if it's a remote URL).
+#     2) Transcribing the lecture.
+#     3) Storing transcript & embeddings in Qdrant.
+#     4) Generating MCQs for the lecture using Groq + Qdrant retrieval.
+#     5) Storing the quiz JSON in PostgreSQL.
+#     """
+#     data = request.get_json()
+#     course_id = data.get("course_id")
+#     lecture_id = data.get("lecture_id")
+#     video_path = data.get("video_path")
+
+#     if not course_id or not lecture_id or not video_path:
+#         return jsonify({"status": "error", "message": "Missing required fields"}), 400
+
+#     local_dir = "/home/ubuntu/quiz_data"  # Updated for Linux environment
+#     local_video_path = video_path
+
+#     if video_path.startswith("http"):
+#         local_video_path = download_video_from_url(video_path, local_dir)
+#         if not local_video_path:
+#             return jsonify({"status": "error", "message": "Video download failed"}), 500
+
+
+#     # Transcribe
+#     transcript_filename = f"{uuid.uuid4()}.txt"
+#     transcript_path = os.path.join(local_dir, transcript_filename)
+#     success = transcribe_video(local_video_path, transcript_path)
+#     if not success:
+#         return jsonify({"status": "error", "message": "Transcription failed"}), 500
+
+#     # Store transcript in Qdrant
+#     store_transcript_in_qdrant(lecture_id=lecture_id, transcript_path=transcript_path)
+
+#     # Generate MCQs for the lecture
+#     mcq_gen = MCQGenerator(
+#         api_key=Config.GROQ_API_KEY,
+#         qdrant_url=Config.QDRANT_URL,
+#         qdrant_collection=f"lecture_{lecture_id}"
+#     )
+
+#     prompt_topic = "Generate a comprehensive quiz covering the lecture content."
+#     generation_result = mcq_gen.generate_mcqs(prompt_topic, num_questions=5)
+#     if generation_result.get("status") == "error":
+#         return jsonify({"status": "error", "message": "MCQ generation failed"}), 500
+
+#     quiz_json = generation_result.get("quiz")
+
+#     # Store quiz JSON in PostgreSQL
+#     import json
+#     temp_quiz_file = f"E:\\Wappnet internship\\ElevateEdOrg\\{uuid.uuid4()}.json"
+#     with open(temp_quiz_file, "w", encoding="utf-8") as f:
+#         f.write(json.dumps(quiz_json, indent=2))
+
+#     try:
+#         sql_ops = SqlOps()
+#         sql_ops.insert_quiz(
+#             course_id=course_id,
+#             lecture_id=lecture_id,
+#             file_path=temp_quiz_file
+#         )
+#         sql_ops.close()
+#     except Exception as e:
+#         return jsonify({"status": "error", "message": f"DB Insert failed: {e}"}), 500
+
+#     return jsonify({
+#         "status": "success",
+#         "message": f"Quiz generated for lecture {lecture_id} and stored in DB"
+#     }), 200
+
+
+
 import uuid
 from flask import Blueprint, jsonify, request
 from flasgger import swag_from
-
-from quiz.config import Config
-from quiz.sql_ops import SqlOps
-from quiz.video_download import download_video_from_url
-from quiz.transcription import transcribe_video
-from quiz.qdrant_ops import store_transcript_in_qdrant
-from quiz.quiz import MCQGenerator
+from quiz.task import generate_quiz_task  # Import the background task
 
 quiz_blueprint = Blueprint('quiz', __name__)
 
@@ -181,11 +299,11 @@ quiz_blueprint = Blueprint('quiz', __name__)
     ],
     'responses': {
         200: {
-            'description': 'Quiz generated successfully',
+            'description': 'Quiz generation job created successfully',
             'examples': {
                 'application/json': {
                     'status': 'success',
-                    'message': 'Quiz generated and stored in DB'
+                    'message': 'Quiz generation job created successfully'
                 }
             }
         },
@@ -199,12 +317,14 @@ quiz_blueprint = Blueprint('quiz', __name__)
 })
 def generate_quiz_for_lecture():
     """
-    Generates a quiz for the given lecture by:
+    Enqueues a background job to generate a quiz for the given lecture by:
     1) Downloading the video locally (if it's a remote URL).
     2) Transcribing the lecture.
     3) Storing transcript & embeddings in Qdrant.
     4) Generating MCQs for the lecture using Groq + Qdrant retrieval.
     5) Storing the quiz JSON in PostgreSQL.
+
+    Returns HTTP 200 immediately upon successful job creation.
     """
     data = request.get_json()
     course_id = data.get("course_id")
@@ -214,57 +334,10 @@ def generate_quiz_for_lecture():
     if not course_id or not lecture_id or not video_path:
         return jsonify({"status": "error", "message": "Missing required fields"}), 400
 
-    local_dir = "/home/ubuntu/quiz_data"  # Updated for Linux environment
-    local_video_path = video_path
-
-    if video_path.startswith("http"):
-        local_video_path = download_video_from_url(video_path, local_dir)
-        if not local_video_path:
-            return jsonify({"status": "error", "message": "Video download failed"}), 500
-
-
-    # Transcribe
-    transcript_filename = f"{uuid.uuid4()}.txt"
-    transcript_path = os.path.join(local_dir, transcript_filename)
-    success = transcribe_video(local_video_path, transcript_path)
-    if not success:
-        return jsonify({"status": "error", "message": "Transcription failed"}), 500
-
-    # Store transcript in Qdrant
-    store_transcript_in_qdrant(lecture_id=lecture_id, transcript_path=transcript_path)
-
-    # Generate MCQs for the lecture
-    mcq_gen = MCQGenerator(
-        api_key=Config.GROQ_API_KEY,
-        qdrant_url=Config.QDRANT_URL,
-        qdrant_collection=f"lecture_{lecture_id}"
-    )
-
-    prompt_topic = "Generate a comprehensive quiz covering the lecture content."
-    generation_result = mcq_gen.generate_mcqs(prompt_topic, num_questions=5)
-    if generation_result.get("status") == "error":
-        return jsonify({"status": "error", "message": "MCQ generation failed"}), 500
-
-    quiz_json = generation_result.get("quiz")
-
-    # Store quiz JSON in PostgreSQL
-    import json
-    temp_quiz_file = f"E:\\Wappnet internship\\ElevateEdOrg\\{uuid.uuid4()}.json"
-    with open(temp_quiz_file, "w", encoding="utf-8") as f:
-        f.write(json.dumps(quiz_json, indent=2))
-
-    try:
-        sql_ops = SqlOps()
-        sql_ops.insert_quiz(
-            course_id=course_id,
-            lecture_id=lecture_id,
-            file_path=temp_quiz_file
-        )
-        sql_ops.close()
-    except Exception as e:
-        return jsonify({"status": "error", "message": f"DB Insert failed: {e}"}), 500
+    # Enqueue the background job.
+    generate_quiz_task.delay(course_id, lecture_id, video_path)
 
     return jsonify({
         "status": "success",
-        "message": f"Quiz generated for lecture {lecture_id} and stored in DB"
+        "message": f"Quiz generation job created for lecture {lecture_id}. It will be processed in the background."
     }), 200
