@@ -126,10 +126,12 @@ def generate_quiz_task(course_id, lecture_id, video_path):
     quiz_json = generation_result.get("quiz")
 
     # 5. Save the quiz JSON to a file.
+    local_dir = "/home/ubuntu/quiz_data"
     quiz_filename = f"quiz_{lecture_id}_{uuid.uuid4()}.json"
     quiz_path = os.path.join(local_dir, quiz_filename)
     with open(quiz_path, "w", encoding="utf-8") as quiz_file:
         quiz_file.write(json.dumps(quiz_json, indent=2))
+
 
     # 6. Insert the quiz record into PostgreSQL.
     try:
