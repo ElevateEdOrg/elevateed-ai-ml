@@ -23,3 +23,5 @@ sql_ops.log
 /quiz/__pycache__/
 
 video_download.log
+ecosystem.config.js
+/logs
