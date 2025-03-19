@@ -1,0 +1,22 @@
+.env
+/elevateded
+/Quiz/__pycache__/
+/videos
+/test/Gradient descent for multiple linear regression.webm
+/__pycache__/
+/recommendation/__pycache__
+sql_ops.log
+/elevate_ed_aiml/elevate_ed_aiml/__pycache__
+/elevate_ed_aiml/quiz/__pycache__
+/elevate_ed_aiml/recommendation/__pycache__
+/tets_files/__pycache__/
+/research/2103.14757v1.pdf
+/env/
+/venv/
+/quiz/__pycache__/
+/t5.ipynb
+video_download.log
+ecosystem.config.js
+/logs
+video_download.log
+/tets_files/
