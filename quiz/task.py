@@ -83,7 +83,7 @@ celery_app = Celery('quiz_tasks', broker='redis://localhost:6379/0')
 
 @celery_app.task
 def generate_quiz_task(course_id, lecture_id, video_path):
-    local_dir = "/home/ubuntu/quiz_data"  # Adjust based on your environment
+    local_dir = "D:\\Wappnet\\repo\\transcription"  # Adjust based on your environment
     os.makedirs(local_dir, exist_ok=True)
     local_video_path = video_path
 
@@ -126,7 +126,7 @@ def generate_quiz_task(course_id, lecture_id, video_path):
     quiz_json = generation_result.get("quiz")
 
     # 5. Save the quiz JSON to a file.
-    local_dir = "/home/ubuntu/quiz_data"
+    local_dir = "D:\\Wappnet\\repo\\transcription"
     quiz_filename = f"quiz_{lecture_id}_{uuid.uuid4()}.json"
     quiz_path = os.path.join(local_dir, quiz_filename)
     with open(quiz_path, "w", encoding="utf-8") as quiz_file:

@@ -1,17 +1,33 @@
+# Core Web Frameworks & APIs
 celery==5.4.0
-flasgger==0.9.7.1
 Flask==3.1.0
 flask_sqlalchemy==3.1.1
-groq==0.18.0
+flasgger==0.9.7.1
+
+# Data Processing, NLP & ML
 nltk==3.9.1
-numpy==2.2.3
-openai_whisper==20240930
+numpy
 pandas==2.2.3
-psycopg2==2.9.10
-python-dotenv==1.0.1
-qdrant_client==1.13.3
-Requests==2.32.3
-scikit_learn==1.6.1
-sentence_transformers==3.4.1
+scikit-learn==1.6.1
+sentence-transformers==3.4.1
 spacy==3.8.4
+
+# Database and Environment
+psycopg2-binary==2.9.10
+python-dotenv==1.0.1
 SQLAlchemy==2.0.38
+
+# API Requests and Vector Search
+requests==2.32.3
+qdrant-client==1.13.3
+
+# Other Tools
+groq==0.18.0
+
+# Speech-to-text (using official OpenAI Whisper from GitHub)
+# This avoids the numba dependency causing issues on Python 3.12.
+git+https://github.com/openai/whisper.git
+
+# GPU Support via PyTorch (for Whisper and sentence-transformers)
+# Choose the correct CUDA variant for your system. For example, for CUDA 11.7:
+torch==2.0.1+cu117  --find-links https://download.pytorch.org/whl/cu117

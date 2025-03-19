@@ -25,3 +25,5 @@ sql_ops.log
 video_download.log
 ecosystem.config.js
 /logs
+
+/venv/

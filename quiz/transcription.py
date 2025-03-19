@@ -23,7 +23,7 @@ def transcribe_video(file_path: str, output_path: str) -> bool:
     
     try:
         # Load the video file using Whisper
-        model = whisper.load_model("base")
+        model = whisper.load_model("base", device="cuda")
         result = model.transcribe(file_path)
         text  = result.get("text","")
 
